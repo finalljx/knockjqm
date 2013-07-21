@@ -1,0 +1,44 @@
+<html>
+	<head>
+        <link rel="stylesheet" href="../jquery.mobile-1.3.1.css">
+		<script src="../jquery-1.9.1.min.js"></script>
+        <script src="../jquery.mobile-1.3.1.js"></script>
+        <script src="../knockout-2.3.0.js"></script>
+
+	</head>
+
+	<body>
+		<p> firstName:<input data-bind="value : firstName"></input></p>
+		<p> secondName:<input data-bind="value : secondName"></input></p>
+		<div data-bind="attr: {title:title}"><input data-bind="value: fullName"></input></div>
+	</body>
+	<script>
+		var viewModel=function(first,second){
+
+		var self=this;
+		this.firstName=ko.observable(first);
+		this.secondName=ko.observable(second);
+		this.fullName=ko.computed({
+			read: function(){
+				return this.firstName()+"--"+this.secondName();
+			},
+			write: function(value){
+				
+				var lastpost=value.indexOf(" ");
+				if(lastpost > 0){
+					self.firstName(value.substring(0,lastpost));
+					self.secondName(value.substring(lastpost + 1,value.length));
+				}
+				
+			},
+			owner:this
+			});
+		this.title="iam ko title";
+		}
+		$(document).ready(function(){
+
+			ko.applyBindings(new viewModel("lisi","wangwu"));
+		})
+	</script>
+</html>
+
