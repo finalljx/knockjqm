@@ -15,6 +15,10 @@
 
 		<p> have<span data-bind="text: servers().length"></span> servers</p>
 		<!-- <p> serverTitle<span data-bind="text: serverTitle()"></span></p>-->
+		 <ul data-bind="foreach: servers">
+			 <li data-bind="text: $data.name"><span data-bind="text: $index"></span><span data-bind="text: $root.serverName"></span></li>
+		
+		</ul>
 	</body>
 	<script>
 		$(document).ready(function(){
