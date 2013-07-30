@@ -29,8 +29,15 @@
 		var viewModel={serverTime:"88888"};
 		function renderData(data){
 			var jsonData=$.parseJSON(data);
-			viewModel=ko.mapping.fromJS(jsonData);
 			//viewModel={serverTime:"22222222",secondName:"3333"}
+			var mapping={
+				serverName:{
+					update:function(options){
+						return options.data+"----";
+					}
+				}
+			}
+			viewModel=ko.mapping.fromJS(jsonData,mapping);
 			ko.applyBindings(viewModel);
 		}
 	</script>
