@@ -14,6 +14,7 @@
 		<p> serverName:<input data-bind="value : serverName"></input></p>
 
 		<p> have<span data-bind="text: servers().length"></span> servers</p>
+		<!-- <p> serverTitle<span data-bind="text: serverTitle()"></span></p>-->
 	</body>
 	<script>
 		$(document).ready(function(){
@@ -27,18 +28,30 @@
 			})
 		//	ko.applyBindings(new viewModel("lisi","wangwu"));
 		})
+		var mychildModel=function(data){
+			ko.mapping.fromJS(data,{},this);
+			this.serverTitle=ko.computed(function(){
+				return data+"nameTitle";
+			},this);
+		}
 		var viewModel={serverTime:"88888"};
 		function renderData(data){
 			var jsonData=$.parseJSON(data);
 			//viewModel={serverTime:"22222222",secondName:"3333"}
 			var mapping={
-				serverName:{
+				'serverName':{
 					update:function(options){
 						return options.data+"----";
+					}
+				},
+				'serverTime':{
+					create:function(options){
+						return new mychildModel(options.data);
 					}
 				}
 			}
 			viewModel=ko.mapping.fromJS(jsonData,mapping);
+			//viewModel.mappedRemove("serverTime");
 			ko.applyBindings(viewModel);
 		}
 	</script>
