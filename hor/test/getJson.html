@@ -23,6 +23,7 @@
 		
 		</ul>
 		<button data-bind="click: addItem">add </button>
+		<button onclick="parseSaveData()">click</button>
 	</body>
 	<script>
 		$(document).ready(function(){
@@ -42,14 +43,15 @@
 				return data+"nameTitle";
 			},this);
 		}
-		var viewModel={serverTime:"88888"};
 		function renderData(data){
 			var jsonData=$.parseJSON(data);
 			//自定义模型，与服务器返回json对象合并$.extend();
 			var customModel={
 				"serverTitle":ko.observable("server title observable"),
 				"addItem": function(){
-					alert("add item");
+					alert(ko.toJSON(viewModel));
+					var jsModel=ko.toJS(viewModel);
+					alert(jsModel)
 				}
 
 			}
@@ -58,16 +60,20 @@
 					update:function(options){
 						return options.data+"----";
 					}
-				},
-				'serverTime':{
-					create:function(options){
-						return new mychildModel(options.data);
-					}
 				}
+				//'serverTime':{
+				//	create:function(options){
+				//		return new mychildModel(options.data);
+				//	}
+				//}
 			}
 			viewModel=ko.mapping.fromJS(jsonData,mapping);
 			//viewModel.mappedRemove("serverTime");
 			$.extend(viewModel,customModel);
+			ko.applyBindings(viewModel);
+		}
+		function parseSaveData(){
+			var jsModel=ko.toJS(viewModel);
 			ko.applyBindings(viewModel);
 		}
 	</script>
