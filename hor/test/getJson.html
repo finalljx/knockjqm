@@ -24,6 +24,31 @@
 		</ul>
 		<button data-bind="click: addItem">add </button>
 		<button onclick="parseSaveData()">click</button>
+		<p>contracts </p>
+		<table>
+			<th>firstName</th>
+			<th>LastName</th>
+			<th>PhoneNumer</th>
+			<tbody data-bind="foreach: contracts">
+				<tr >
+					<td data-bind="text: firstName"></td>
+					<td data-bind="text: lastName"></td>
+					<td >
+						<table>
+							<th>type</th>
+							<th>number</th>
+							<tbody data-bind="foreach:phones">
+								<tr>
+									<td data-bind="text: type"></td>
+									<td data-bind="text: number"></td>
+								</tr>
+							
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</body>
 	<script>
 		$(document).ready(function(){
@@ -52,9 +77,52 @@
 					alert(ko.toJSON(viewModel));
 					var jsModel=ko.toJS(viewModel);
 					alert(jsModel)
-				}
+				},
+				"contracts":ko.computed( function(){
+					return contractsModel([{
+							firstName:"zhangsan",
+							lastName:"xing",
+							phones:[{
+								type:"mobilePHone",
+								number:"12322222222"
+							}]}])
+					
+				})
 
 			}
+
+				var contractsModel=function(contracts){
+					var self=this;
+					self.contracts=ko.observableArray(ko.utils.arrayMap(contracts,function(contract){
+						return {
+							firstName:contract.firstName,
+							lastName:contract.lastName,
+							phones:ko.observableArray(contract.phones)
+						}
+					}));
+					self.addContract=function(){
+						self.contracts.push({
+							firstName:"",
+							lastName:"",
+							phones:ko.observableArray()
+						})
+					}
+					self.removeContract=function (contract){
+						self.contracts.remove(contract);
+					}
+					self.addphone=function(contract){
+						contract.phones.push({
+							type:"",
+							number:""
+						})	
+					}
+					self.removePhone=function(phone){
+						$.each(self.contracts(),function(){
+							this.phones.remove(phone)
+						})
+					}
+					return self;
+				}
 			var mapping={
 				'serverName':{
 					update:function(options){
