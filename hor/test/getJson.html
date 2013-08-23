@@ -22,33 +22,10 @@
 			 <p><span data-bind="text: $parent.serverTitle">ddddddddd</span></p>
 		
 		</ul>
-		<button data-bind="click: addItem">add </button>
+		
 		<button onclick="parseSaveData()">click</button>
 		<p>contracts </p>
-		<table>
-			<th>firstName</th>
-			<th>LastName</th>
-			<th>PhoneNumer</th>
-			<tbody data-bind="foreach: contracts">
-				<tr >
-					<td data-bind="text: firstName"></td>
-					<td data-bind="text: lastName"></td>
-					<td >
-						<table>
-							<th>type</th>
-							<th>number</th>
-							<tbody data-bind="foreach:phones">
-								<tr>
-									<td data-bind="text: type"></td>
-									<td data-bind="text: number"></td>
-								</tr>
-							
-							</tbody>
-						</table>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		
 	</body>
 	<script>
 		$(document).ready(function(){
@@ -70,27 +47,7 @@
 		}
 		function renderData(data){
 			var jsonData=$.parseJSON(data);
-			//自定义模型，与服务器返回json对象合并$.extend();
-			var customModel={
-				"serverTitle":ko.observable("server title observable"),
-				"addItem": function(){
-					alert(ko.toJSON(viewModel));
-					var jsModel=ko.toJS(viewModel);
-					alert(jsModel)
-				},
-				"contracts":ko.computed( function(){
-					return contractsModel([{
-							firstName:"zhangsan",
-							lastName:"xing",
-							phones:[{
-								type:"mobilePHone",
-								number:"12322222222"
-							}]}])
-					
-				})
-
-			}
-
+		
 				var contractsModel=function(contracts){
 					var self=this;
 					self.contracts=ko.observableArray(ko.utils.arrayMap(contracts,function(contract){
@@ -129,20 +86,17 @@
 						return options.data+"----";
 					}
 				}
-				//'serverTime':{
-				//	create:function(options){
-				//		return new mychildModel(options.data);
-				//	}
-				//}
+				
+
 			}
+
 			viewModel=ko.mapping.fromJS(jsonData,mapping);
 			//viewModel.mappedRemove("serverTime");
-			$.extend(viewModel,customModel);
+			//$.extend(viewModel,customModel);
 			ko.applyBindings(viewModel);
 		}
 		function parseSaveData(){
-			var jsModel=ko.toJS(viewModel);
-			ko.applyBindings(viewModel);
+			viewModel=ko.mapping.fromJS({serverName:"99999"},{},viewModel);
 		}
 	</script>
 </html>
